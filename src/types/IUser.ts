@@ -3,5 +3,4 @@ export default interface IUser {
     login: string;
     avatar_url?: string | undefined;
     url: string;
-    name: string;
 }

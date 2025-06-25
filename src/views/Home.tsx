@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Accordion, Alert, Button, Form, Spinner, Stack } from "react-bootstrap";
 import repoService from "../services/repoService";
 import type IUser from "../types/IUser";
@@ -17,21 +17,18 @@ export default function Home() {
         try {
             const response = await repoService.getListUser(username)
             if (!response.success) {
-                throw { response }
+                setMessage(response.message ?? '')
+            } else {
+                setData(response.data)
             }
-            console.log(response.data)
-            setData(response.data)
-        } catch (error: any) {
-            setMessage(error?.response?.message ?? 'Unable to procceed')
+
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            setMessage('Unable to procceed')
         } finally {
             setLoading(false)
         }
     }
-
-    useEffect(() => {
-        getListUser(usernameSearch)
-    }, [])
-
 
     const handleSearch: React.FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault()
@@ -69,15 +66,15 @@ export default function Home() {
             )}
 
             <Stack className="overflow-y-scroll">
+                {data.length > 0 && (
+                    <Accordion>
+                        {data.map(res => <UserAccordionItem key={`${res.id}_user`} user={res} />)}
+                    </Accordion>
+                )}
                 {loading && (
                     <div className="d-flex justify-content-center">
                         <Spinner animation="border" variant="primary" />
                     </div>
-                )}
-                {data.length > 0 && (
-                    <Accordion>
-                        {data.map((res, index) => <UserAccordionItem key={`${index}_user`} user={res} />)}
-                    </Accordion>
                 )}
             </Stack>
         </div>

@@ -1,8 +1,9 @@
 import { memo, useState } from "react";
-import { AccordionBody, AccordionHeader, AccordionItem, Alert, Card, CardBody, Spinner, Stack } from "react-bootstrap";
+import { AccordionBody, AccordionHeader, AccordionItem, Alert, Spinner, Stack } from "react-bootstrap";
 import type IUser from "../types/IUser";
 import type IRepo from "../types/IRepo";
 import repoService from "../services/repoService";
+import RepoCardItem from "./RepoCardItem";
 
 export interface UserAccordionItemProps {
     user: IUser
@@ -22,12 +23,13 @@ const UserAccordionItem = ({ user }: UserAccordionItemProps) => {
         try {
             const response = await repoService.getListRepo(user.login)
             if (!response.success) {
-                throw { response }
+                setMessage(response.message ?? '')
+            } else {
+                setRepositories(response.data)
             }
-            console.log(response.data)
-            setRepositories(response.data)
-        } catch (error: any) {
-            setMessage(error?.response?.message ?? 'Unable to procceed')
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            setMessage('Unable to procceed')
         } finally {
             setLoading(false)
         }
@@ -40,7 +42,6 @@ const UserAccordionItem = ({ user }: UserAccordionItemProps) => {
                     <img className="user-image" src={user.avatar_url ?? ''} />
                     <div>
                         <span>{user.login}</span>
-                        <span><small>{user.name}</small></span>
                     </div>
                 </div>
             </AccordionHeader>
@@ -56,18 +57,14 @@ const UserAccordionItem = ({ user }: UserAccordionItemProps) => {
                     </div>
                 )}
                 <Stack gap={3} className="repository-content">
-                    {repositories.map((res, index) => (
-                        <Card key={`${index}_repository`}>
-                            <CardBody>
-                                <div className="d-flex justify-content-between">
-                                    <span><b>{res.name}</b></span>
-                                    <div className="d-flex align-items-center">
-                                        <span><b>{res.stargazers_count}</b></span>
-                                    </div>
-                                </div>
-                                <p>{res.description ?? <i>No description</i>}</p>
-                            </CardBody>
-                        </Card>
+                    {repositories.map(res => (
+                        <RepoCardItem
+                            key={`${res.id}_repository`}
+                            name={res.name}
+                            stargazers_count={res.stargazers_count}
+                            description={res.description}
+                            html_url={res.html_url}
+                        />
                     ))}
                 </Stack>
             </AccordionBody>
