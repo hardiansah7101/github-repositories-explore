@@ -1,0 +1,16 @@
+#root {
+  width: 100%;
+  padding: 2rem;
+}
+
+.user-image {
+  height: 50px;
+  width: 50px;
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.repository-content {
+  max-height: 500px;
+  overflow-y: scroll;
+}

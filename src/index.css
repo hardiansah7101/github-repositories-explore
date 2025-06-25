@@ -1,0 +1,13 @@
+
+body {
+  margin: 0;
+  display: flex;
+  min-width: 320px;
+  height: 100vh;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    background-color: #ffffff;
+  }
+}
