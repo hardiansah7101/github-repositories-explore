@@ -5,8 +5,7 @@ const repoService = {
 
     getListUser: async (username: string) => {
         try {
-            const endpoint = `/search/users?q=${username}`
-            const response = await axiosInstance.get(endpoint)
+            const response = await axiosInstance.get(`/search/users?q=${username}`)
             return {
                 success: true,
                 data: response.data?.items ?? response.data
