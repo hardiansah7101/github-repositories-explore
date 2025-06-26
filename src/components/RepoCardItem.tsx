@@ -21,8 +21,8 @@ const RepoCardItem = ({
     }
 
     return (
-        <Card>
-            <CardBody onClick={handleOpenUrl}>
+        <Card className="repo-card" onClick={handleOpenUrl}>
+            <CardBody>
                 <div className="d-flex justify-content-between">
                     <span><b>{name}</b></span>
                     <div className="d-flex align-items-center gap-2">
